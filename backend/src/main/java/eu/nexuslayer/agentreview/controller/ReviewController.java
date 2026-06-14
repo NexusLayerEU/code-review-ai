@@ -134,13 +134,11 @@ public class ReviewController {
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable String id, Authentication auth) {
         User user = (User) auth.getPrincipal();
-        return reviewRepository.findById(id)
-                .filter(r -> r.getUserId() != null && r.getUserId().equals(user.getId()))
-                .map(review -> {
-                    findingRepository.deleteByReviewId(review.getId());
-                    reviewRepository.delete(review);
-                    return ResponseEntity.<Void>noContent().build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        var found = reviewRepository.findById(id)
+                .filter(r -> r.getUserId() != null && r.getUserId().equals(user.getId()));
+        if (found.isEmpty()) return ResponseEntity.notFound().build();
+        findingRepository.deleteByReviewId(found.get().getId());
+        reviewRepository.delete(found.get());
+        return ResponseEntity.noContent().build();
     }
 }
