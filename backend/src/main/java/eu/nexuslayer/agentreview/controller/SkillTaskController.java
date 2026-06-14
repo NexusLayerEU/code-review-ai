@@ -11,6 +11,7 @@ import eu.nexuslayer.agentreview.repository.ReviewRepository;
 import eu.nexuslayer.agentreview.service.ReportBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +34,67 @@ public class SkillTaskController {
     private final FindingRepository findingRepository;
     private final ReportBuilder reportBuilder;
     private final ObjectMapper objectMapper;
+
+    /**
+     * Skill-initiated scan: register a new review already in PROCESSING state.
+     * The skill reads files locally, calls this to get a reviewId, analyzes them,
+     * then posts results to /tasks/{id}/complete. No web UI action needed.
+     */
+    @PostMapping("/scan")
+    @Transactional
+    public ResponseEntity<Map<String, String>> scan(
+            @RequestBody SkillScanRequest request,
+            Authentication auth) {
+        User user = (User) auth.getPrincipal();
+        String lang = request.getLanguage() != null ? request.getLanguage() : "unknown";
+        Review review = Review.builder()
+                .id(UUID.randomUUID().toString())
+                .userId(user.getId())
+                .agentId(request.getProjectName())
+                .language(lang)
+                .sourceType(SourceType.DIRECTORY)
+                .reviewMode(ReviewMode.FULL)
+                .executorType(ExecutorType.REMOTE_SKILL)
+                .taskDescription(request.getTaskDescription())
+                .status(ReviewStatus.PROCESSING)
+                .createdAt(LocalDateTime.now())
+                .build();
+        if (request.getFiles() != null) {
+            try {
+                review.setSourceMeta(objectMapper.writeValueAsString(request.getFiles()));
+            } catch (Exception e) {
+                log.warn("Could not serialize files for scan: {}", e.getMessage());
+            }
+        }
+        reviewRepository.save(review);
+        log.info("Skill scan registered: reviewId={} project={} lang={} files={}",
+                review.getId(), request.getProjectName(), lang,
+                request.getFiles() != null ? request.getFiles().size() : 0);
+        Map<String, String> resp = new LinkedHashMap<>();
+        resp.put("reviewId", review.getId());
+        resp.put("status", "PROCESSING");
+        return ResponseEntity.ok(resp);
+    }
+
+    /** List recent completed reviews for this user — lets the skill show a history summary. */
+    @GetMapping("/reviews")
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<Map<String, Object>>> reviews(Authentication auth) {
+        User user = (User) auth.getPrincipal();
+        List<Review> recent = reviewRepository.findRecentByUserId(user.getId(), PageRequest.of(0, 20));
+        List<Map<String, Object>> result = recent.stream().map(r -> {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("reviewId", r.getId());
+            m.put("createdAt", r.getCreatedAt());
+            m.put("status", r.getStatus().name());
+            m.put("language", r.getLanguage());
+            m.put("projectName", r.getAgentId() != null ? r.getAgentId() : "");
+            m.put("riskScore", r.getRiskScore() != null ? r.getRiskScore() : 0);
+            m.put("recommendation", r.getRecommendation() != null ? r.getRecommendation() : "");
+            return m;
+        }).toList();
+        return ResponseEntity.ok(result);
+    }
 
     /** Poll for pending tasks. Atomically marks them PROCESSING so no task is picked up twice. */
     @GetMapping("/tasks/pending")
