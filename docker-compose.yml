@@ -1,0 +1,85 @@
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/agentreview
+      SPRING_DATASOURCE_USERNAME: agentreview
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-agentreview}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANALYZER_URL: http://analyzer:8081
+      JWT_SECRET: ${JWT_SECRET:-agentreview-jwt-secret-change-in-production-min-32-chars}
+      JAVA_OPTS: "-Xms256m -Xmx768m"
+    depends_on:
+      db:
+        condition: service_healthy
+      analyzer:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    networks: [agentreview]
+
+  analyzer:
+    build: ./analyzer
+    ports:
+      - "8081:8081"
+    command: uvicorn main:app --host 0.0.0.0 --port 8081
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+    networks: [agentreview]
+
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: agentreview
+      MARIADB_USER: agentreview
+      MARIADB_PASSWORD: ${DB_PASSWORD:-agentreview}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [agentreview]
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+    networks: [agentreview]
+
+volumes:
+  db_data:
+networks:
+  agentreview:
+    driver: bridge

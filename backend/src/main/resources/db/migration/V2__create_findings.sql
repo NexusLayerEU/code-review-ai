@@ -1,0 +1,20 @@
+CREATE TABLE findings (
+    id VARCHAR(36) PRIMARY KEY,
+    review_id VARCHAR(36) NOT NULL,
+    rule_id VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    severity VARCHAR(20) NOT NULL,
+    confidence VARCHAR(20) NOT NULL,
+    analysis_layer INT NOT NULL DEFAULT 1,
+    file_path VARCHAR(500),
+    line_start INT,
+    line_end INT,
+    description TEXT NOT NULL,
+    suggestion TEXT,
+    evidence TEXT,
+    FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE,
+    INDEX idx_review_id (review_id),
+    INDEX idx_rule_id (rule_id),
+    INDEX idx_severity (severity),
+    INDEX idx_category (category)
+);
