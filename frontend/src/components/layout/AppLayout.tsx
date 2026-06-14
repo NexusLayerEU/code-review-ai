@@ -14,11 +14,11 @@ import {
 import { clearAuth, getUser } from '../../lib/auth'
 
 const NAV_ITEMS = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/review/new', label: 'New Review', icon: Plus },
-  { to: '/rules', label: 'Rules', icon: BookOpen },
-  { to: '/analytics', label: 'Analytics', icon: BarChart3 },
-  { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/app/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/app/review/new', label: 'New Review', icon: Plus },
+  { to: '/app/rules', label: 'Rules', icon: BookOpen },
+  { to: '/app/analytics', label: 'Analytics', icon: BarChart3 },
+  { to: '/app/settings', label: 'Settings', icon: Settings },
 ]
 
 const BREADCRUMB_MAP: Record<string, string> = {

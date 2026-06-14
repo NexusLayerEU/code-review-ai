@@ -35,7 +35,7 @@ export default function LoginPage() {
     try {
       const auth = await authApi.login(email, password)
       saveAuth(auth)
-      navigate('/dashboard')
+      navigate('/app/dashboard')
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??

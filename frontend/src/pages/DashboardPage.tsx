@@ -100,7 +100,7 @@ function EmptyState() {
       <p className="text-sm mb-5" style={{ color: '#64748b' }}>
         Submit your first review to start catching risky patterns
       </p>
-      <Link to="/review/new" className="btn-primary">
+      <Link to="/app/review/new" className="btn-primary">
         <PlusCircle size={14} />
         Create your first review
       </Link>
@@ -160,7 +160,7 @@ export default function DashboardPage() {
             AI-powered code review for agent-generated code
           </p>
         </div>
-        <Link to="/review/new" className="btn-primary">
+        <Link to="/app/review/new" className="btn-primary">
           <PlusCircle size={14} />
           New Review
         </Link>
@@ -254,7 +254,7 @@ export default function DashboardPage() {
                 {reviews.map(r => (
                   <tr
                     key={r.reviewId}
-                    onClick={() => navigate(`/review/${r.reviewId}`)}
+                    onClick={() => navigate(`/app/review/${r.reviewId}`)}
                     className="cursor-pointer transition-colors"
                     style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}
                     onMouseEnter={e => {

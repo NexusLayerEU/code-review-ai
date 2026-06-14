@@ -50,7 +50,7 @@ export default function RegisterPage() {
     try {
       const auth = await authApi.register(email, username, password)
       saveAuth(auth)
-      navigate('/dashboard')
+      navigate('/app/dashboard')
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
