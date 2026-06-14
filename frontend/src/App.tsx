@@ -9,6 +9,7 @@ import ReviewDetailPage from './pages/ReviewDetailPage'
 import RulesPage from './pages/RulesPage'
 import AnalyticsPage from './pages/AnalyticsPage'
 import SettingsPage from './pages/SettingsPage'
+import ClaudeSkillPage from './pages/ClaudeSkillPage'
 import AppLayout from './components/layout/AppLayout'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="rules" element={<RulesPage />} />
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="settings" element={<SettingsPage />} />
+        <Route path="skill" element={<ClaudeSkillPage />} />
       </Route>
       {/* Legacy redirects */}
       <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />

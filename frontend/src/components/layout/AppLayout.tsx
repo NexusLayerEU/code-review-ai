@@ -6,6 +6,7 @@ import {
   BookOpen,
   BarChart3,
   Settings,
+  Terminal,
   LogOut,
   Menu,
   X,
@@ -19,6 +20,7 @@ const NAV_ITEMS = [
   { to: '/app/rules', label: 'Rules', icon: BookOpen },
   { to: '/app/analytics', label: 'Analytics', icon: BarChart3 },
   { to: '/app/settings', label: 'Settings', icon: Settings },
+  { to: '/app/skill', label: 'Claude Skill', icon: Terminal },
 ]
 
 const BREADCRUMB_MAP: Record<string, string> = {
@@ -28,6 +30,7 @@ const BREADCRUMB_MAP: Record<string, string> = {
   rules: 'Rules',
   analytics: 'Analytics',
   settings: 'Settings',
+  skill: 'Claude Skill',
 }
 
 function getBreadcrumbs(pathname: string): string[] {
