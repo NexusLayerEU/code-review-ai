@@ -59,39 +59,38 @@ public class SkillTaskController {
             @RequestBody SkillResultDto result,
             Authentication auth) {
         User user = (User) auth.getPrincipal();
-        return reviewRepository.findById(reviewId)
+        var opt = reviewRepository.findById(reviewId)
                 .filter(r -> user.getId().equals(r.getUserId()))
-                .filter(r -> r.getStatus() == ReviewStatus.PROCESSING || r.getStatus() == ReviewStatus.PENDING)
-                .map(review -> {
-                    List<Finding> findings = mapFindings(result.getFindings(), reviewId);
-                    if (!findings.isEmpty()) {
-                        findingRepository.saveAll(findings);
-                    }
+                .filter(r -> r.getStatus() == ReviewStatus.PROCESSING || r.getStatus() == ReviewStatus.PENDING);
+        if (opt.isEmpty()) return ResponseEntity.notFound().build();
+        Review review = opt.get();
 
-                    ReviewSummaryDto summary = reportBuilder.buildSummary(findings);
-                    if (result.getRiskScore() != null) {
-                        summary = ReviewSummaryDto.builder()
-                                .totalFindings(summary.getTotalFindings())
-                                .bySeverity(summary.getBySeverity())
-                                .byCategory(summary.getByCategory())
-                                .riskScore(result.getRiskScore())
-                                .riskLabel(summary.getRiskLabel())
-                                .recommendation(result.getRecommendation() != null
-                                        ? result.getRecommendation()
-                                        : summary.getRecommendation())
-                                .build();
-                    }
+        List<Finding> findings = mapFindings(result.getFindings(), reviewId);
+        if (!findings.isEmpty()) {
+            findingRepository.saveAll(findings);
+        }
 
-                    reportBuilder.applyToReview(review, summary);
-                    review.setStatus(ReviewStatus.COMPLETE);
-                    review.setCompletedAt(LocalDateTime.now());
-                    if (result.getDurationMs() != null) review.setDurationMs(result.getDurationMs());
-                    reviewRepository.save(review);
-                    log.info("Skill completed review {} — score={} rec={}",
-                            reviewId, review.getRiskScore(), review.getRecommendation());
-                    return ResponseEntity.<Void>noContent().build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        ReviewSummaryDto summary = reportBuilder.buildSummary(findings);
+        if (result.getRiskScore() != null) {
+            summary = ReviewSummaryDto.builder()
+                    .totalFindings(summary.getTotalFindings())
+                    .bySeverity(summary.getBySeverity())
+                    .byCategory(summary.getByCategory())
+                    .riskScore(result.getRiskScore())
+                    .riskLabel(summary.getRiskLabel())
+                    .recommendation(result.getRecommendation() != null
+                            ? result.getRecommendation()
+                            : summary.getRecommendation())
+                    .build();
+        }
+
+        reportBuilder.applyToReview(review, summary);
+        review.setStatus(ReviewStatus.COMPLETE);
+        review.setCompletedAt(LocalDateTime.now());
+        if (result.getDurationMs() != null) review.setDurationMs(result.getDurationMs());
+        reviewRepository.save(review);
+        log.info("Skill completed review {} — score={} rec={}", reviewId, review.getRiskScore(), review.getRecommendation());
+        return ResponseEntity.noContent().build();
     }
 
     /** Skill reports a failure. */
@@ -102,16 +101,15 @@ public class SkillTaskController {
             @RequestBody Map<String, String> body,
             Authentication auth) {
         User user = (User) auth.getPrincipal();
-        return reviewRepository.findById(reviewId)
-                .filter(r -> user.getId().equals(r.getUserId()))
-                .map(review -> {
-                    review.setStatus(ReviewStatus.FAILED);
-                    review.setCompletedAt(LocalDateTime.now());
-                    reviewRepository.save(review);
-                    log.warn("Skill failed review {}: {}", reviewId, body.get("error"));
-                    return ResponseEntity.<Void>noContent().build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        var failOpt = reviewRepository.findById(reviewId)
+                .filter(r -> user.getId().equals(r.getUserId()));
+        if (failOpt.isEmpty()) return ResponseEntity.notFound().build();
+        Review failReview = failOpt.get();
+        failReview.setStatus(ReviewStatus.FAILED);
+        failReview.setCompletedAt(LocalDateTime.now());
+        reviewRepository.save(failReview);
+        log.warn("Skill failed review {}: {}", reviewId, body.get("error"));
+        return ResponseEntity.noContent().build();
     }
 
     private SkillTaskDto toTaskDto(Review review) {

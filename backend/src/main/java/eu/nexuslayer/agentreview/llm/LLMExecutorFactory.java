@@ -38,6 +38,7 @@ public class LLMExecutorFactory {
                 String path = config.getCliPath() != null ? config.getCliPath() : "antigravity";
                 yield new AntGravityCliExecutor(path, config.getExtraArgs());
             }
+            case REMOTE_SKILL -> new AnthropicApiExecutor(defaultApiKey, defaultModel);
         };
     }
 }
