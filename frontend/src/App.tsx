@@ -5,6 +5,9 @@ import RegisterPage from './pages/RegisterPage'
 import DashboardPage from './pages/DashboardPage'
 import NewReviewPage from './pages/NewReviewPage'
 import ReviewDetailPage from './pages/ReviewDetailPage'
+import RulesPage from './pages/RulesPage'
+import AnalyticsPage from './pages/AnalyticsPage'
+import SettingsPage from './pages/SettingsPage'
 import AppLayout from './components/layout/AppLayout'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -25,6 +28,9 @@ export default function App() {
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="review/new" element={<NewReviewPage />} />
         <Route path="review/:id" element={<ReviewDetailPage />} />
+        <Route path="rules" element={<RulesPage />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
+        <Route path="settings" element={<SettingsPage />} />
       </Route>
     </Routes>
   )
