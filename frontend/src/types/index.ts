@@ -1,6 +1,6 @@
 export type ReviewStatus = 'PENDING' | 'PROCESSING' | 'COMPLETE' | 'FAILED'
 export type ReviewMode = 'STATIC' | 'FULL' | 'LLM_ONLY'
-export type ExecutorType = 'CLAUDE_API' | 'CLAUDE_CLI' | 'ANTIGRAVITY_CLI'
+export type ExecutorType = 'CLAUDE_API' | 'CLAUDE_CLI' | 'ANTIGRAVITY_CLI' | 'REMOTE_SKILL'
 export type Severity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFO'
 export type Confidence = 'HIGH' | 'MEDIUM' | 'LOW'
 export type FindingCategory = 'HALLUCINATION' | 'INTENT_DRIFT' | 'MIRROR_TEST' | 'ABSTRACTION_SMELL' | 'CONFIDENCE_BUG' | 'DEAD_REPLICA' | 'VERSION_BLIND' | 'GHOST_HANDLING'

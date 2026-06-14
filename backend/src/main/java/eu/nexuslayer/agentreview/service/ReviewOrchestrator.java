@@ -64,11 +64,25 @@ public class ReviewOrchestrator {
             }
         }
 
+        // Store file contents so the remote skill can fetch them
+        if (request.getFiles() != null && !request.getFiles().isEmpty()) {
+            try {
+                review.setSourceMeta(objectMapper.writeValueAsString(request.getFiles()));
+            } catch (Exception e) {
+                log.warn("Could not serialize files for remote skill: {}", e.getMessage());
+            }
+        }
+
         return reviewRepository.save(review);
     }
 
     @Async
     public void runReview(Review review, ReviewRequest request) {
+        // REMOTE_SKILL: the skill will pick up the task via /api/v1/skill/tasks/pending — nothing to run here
+        if (review.getExecutorType() == eu.nexuslayer.agentreview.model.ExecutorType.REMOTE_SKILL) {
+            log.info("Review {} queued for remote skill executor", review.getId());
+            return;
+        }
         // Reload review from DB — the entity passed in may be detached after createReview()'s transaction commits
         final String reviewId = review.getId();
         review = reviewRepository.findById(reviewId)

@@ -1,5 +1,6 @@
 package eu.nexuslayer.agentreview.config;
 
+import eu.nexuslayer.agentreview.security.ApiKeyAuthFilter;
 import eu.nexuslayer.agentreview.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final ApiKeyAuthFilter apiKeyAuthFilter;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
@@ -43,7 +45,8 @@ public class SecurityConfig {
                 )
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, ApiKeyAuthFilter.class)
                 .build();
     }
 

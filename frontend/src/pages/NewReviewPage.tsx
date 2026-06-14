@@ -57,6 +57,14 @@ const EXECUTOR_OPTIONS: {
     icon: Zap,
     requiresKey: false,
   },
+  {
+    type: 'REMOTE_SKILL',
+    label: 'Remote Skill',
+    description: 'Claude Code on your laptop',
+    icon: Terminal,
+    badge: 'No server cost',
+    requiresKey: false,
+  },
 ]
 
 const REVIEW_MODES: { mode: ReviewMode; label: string; hint: string }[] = [

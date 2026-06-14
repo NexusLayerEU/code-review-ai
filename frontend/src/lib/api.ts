@@ -41,6 +41,21 @@ export const reviewApi = {
   getStatus: (id: string) => api.get(`/reviews/${id}/status`).then(r => r.data),
 }
 
+export interface ApiKeyDto {
+  id: string
+  name: string
+  keyPrefix: string
+  createdAt: string
+  lastUsedAt?: string
+  plainKey?: string
+}
+
+export const apiKeyApi = {
+  list: () => api.get<ApiKeyDto[]>('/keys').then(r => r.data),
+  generate: (name: string) => api.post<ApiKeyDto>('/keys', { name }).then(r => r.data),
+  revoke: (id: string) => api.delete(`/keys/${id}`).then(r => r.data),
+}
+
 export const analyticsApi = {
   getAgentAnalytics: (agentId: string) => api.get(`/analytics/agents/${agentId}`).then(r => r.data),
   getSummary: () => api.get('/analytics/summary').then(r => r.data),

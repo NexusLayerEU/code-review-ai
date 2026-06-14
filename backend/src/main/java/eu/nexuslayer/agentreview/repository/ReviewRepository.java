@@ -1,6 +1,7 @@
 package eu.nexuslayer.agentreview.repository;
 
 import eu.nexuslayer.agentreview.entity.Review;
+import eu.nexuslayer.agentreview.model.ExecutorType;
 import eu.nexuslayer.agentreview.model.ReviewStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,8 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, String> {
     Page<Review> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable);
+    List<Review> findByUserIdAndExecutorTypeAndStatusOrderByCreatedAtAsc(
+            String userId, ExecutorType executorType, ReviewStatus status);
     Page<Review> findByAgentIdOrderByCreatedAtDesc(String agentId, Pageable pageable);
     Page<Review> findByRecommendationOrderByCreatedAtDesc(String recommendation, Pageable pageable);
     List<Review> findByStatusIn(List<ReviewStatus> statuses);
