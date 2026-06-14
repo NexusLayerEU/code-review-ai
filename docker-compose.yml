@@ -2,7 +2,7 @@ services:
   api:
     build: ./backend
     ports:
-      - "8080:8080"
+      - "8200:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/agentreview
       SPRING_DATASOURCE_USERNAME: agentreview
@@ -32,7 +32,7 @@ services:
   analyzer:
     build: ./analyzer
     ports:
-      - "8081:8081"
+      - "8201:8081"
     command: uvicorn main:app --host 0.0.0.0 --port 8081
     restart: unless-stopped
     healthcheck:
@@ -67,7 +67,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "3000:80"
+      - "3200:80"
     depends_on:
       api:
         condition: service_healthy
