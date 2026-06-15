@@ -37,7 +37,23 @@ export const reviewApi = {
   createFromDirectory: (data: object) => api.post<Review>('/reviews/directory', data).then(r => r.data),
   createFromGitDiff: (data: object) => api.post<Review>('/reviews/git-diff', data).then(r => r.data),
   get: (id: string) => api.get<Review>(`/reviews/${id}`).then(r => r.data),
-  list: (params?: object) => api.get<{ reviews: ReviewListItem[], total: number, page: number, size: number }>('/reviews', { params }).then(r => r.data),
+  list: (params?: object) => api.get('/reviews', { params }).then(r => {
+    const d = r.data
+    // Backend returns Spring Page<Review> — map to frontend shape
+    const raw: any[] = d.content ?? d.reviews ?? []
+    const reviews: ReviewListItem[] = raw.map((item: any) => ({
+      reviewId: item.id ?? item.reviewId,
+      agentId: item.agentId,
+      createdAt: item.createdAt,
+      language: item.language,
+      recommendation: item.recommendation,
+      riskScore: item.riskScore ?? item.riskLabel,
+      findingCount: item.findingCount,
+      status: item.status,
+      sourceType: item.sourceType,
+    }))
+    return { reviews, total: d.totalElements ?? d.total ?? raw.length, page: d.number ?? 0, size: d.size ?? 20 }
+  }),
   getStatus: (id: string) => api.get(`/reviews/${id}/status`).then(r => r.data),
 }
 
