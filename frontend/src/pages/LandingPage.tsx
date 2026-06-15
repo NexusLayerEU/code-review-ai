@@ -16,6 +16,11 @@ import {
   Layers,
   Eye,
   Sparkles,
+  Key,
+  Wifi,
+  Server,
+  CreditCard,
+  MonitorSmartphone,
 } from 'lucide-react'
 
 /* ── Shield SVG logo ─────────────────────────────────────────── */
@@ -214,7 +219,7 @@ export default function LandingPage() {
             {[
               { label: 'Security rules', value: '12+' },
               { label: 'Review layers', value: '3' },
-              { label: 'LLM executors', value: '3' },
+              { label: 'LLM executors', value: '4' },
             ].map(({ label, value }) => (
               <div key={label} className="text-center">
                 <p
@@ -387,36 +392,245 @@ export default function LandingPage() {
 
       {/* ── LLM executors ────────────────────────────────────────── */}
       <section className="px-6 md:px-12 py-20">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <Label><Terminal size={11} />Flexible Executors</Label>
-              <h2 className="mt-4 text-3xl font-bold text-text-primary leading-tight">
-                Use your existing<br />AI subscription
-              </h2>
-              <p className="mt-4 text-base leading-relaxed" style={{ color: '#64748b' }}>
-                No forced API spend. Pick how the LLM layer runs — per review, every time.
-                The Claude Code CLI executor uses your Claude subscription directly.
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <Label><Terminal size={11} />Four LLM Executors</Label>
+            <h2 className="mt-4 text-3xl font-bold text-text-primary">
+              Use the AI you already pay for
+            </h2>
+            <p className="mt-3 text-base max-w-xl mx-auto" style={{ color: '#64748b' }}>
+              No forced API spend. Every review lets you choose how the LLM layer runs.
+              Pick the executor that fits your team's setup and budget.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+            {/* Anthropic API */}
+            <div className="p-6 rounded-2xl flex flex-col gap-4"
+              style={{ background: 'rgba(22,22,31,0.8)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.2)' }}>
+                  <CreditCard size={18} style={{ color: '#818cf8' }} />
+                </div>
+                <div>
+                  <p className="font-semibold text-text-primary">Anthropic API</p>
+                  <p className="text-xs" style={{ color: '#475569' }}>Pay-per-token · Direct HTTPS</p>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: '#64748b' }}>
+                Calls the Claude API directly using your Anthropic API key. The review engine sends
+                the code and rules to the API and receives analysis back. No local software required
+                on the server.
               </p>
-              <ul className="mt-6 space-y-3">
+              <ul className="space-y-2">
                 {[
-                  'Choose executor per review — not locked globally',
-                  'Claude Code CLI uses your active subscription',
-                  'Direct API for CI/CD pipelines and automation',
-                  'Antigravity CLI for Antigravity subscribers',
-                ].map(item => (
-                  <li key={item} className="flex items-start gap-3 text-sm" style={{ color: '#94a3b8' }}>
-                    <CheckCircle size={14} style={{ color: '#34d399', flexShrink: 0, marginTop: 2 }} />
-                    {item}
+                  'Best for CI/CD pipelines and automation',
+                  'No local AI software needed on the server',
+                  'Pay per review — cost scales with usage',
+                  'Fastest setup: just paste your API key',
+                ].map(t => (
+                  <li key={t} className="flex items-start gap-2 text-xs" style={{ color: '#64748b' }}>
+                    <CheckCircle size={12} style={{ color: '#6366f1', flexShrink: 0, marginTop: 1 }} />
+                    {t}
                   </li>
                 ))}
               </ul>
+              <div className="mt-auto flex items-center gap-2 px-3 py-2 rounded-lg text-xs"
+                style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.12)', color: '#818cf8' }}>
+                <Server size={11} />
+                Runs on the AgentReview server
+              </div>
             </div>
 
-            <div className="space-y-3">
-              <ExecutorPill icon={Globe} label="Anthropic API" sub="Direct HTTPS — best for CI pipelines" />
-              <ExecutorPill icon={Terminal} label="Claude Code CLI" sub="Uses your Claude subscription, zero extra cost" />
-              <ExecutorPill icon={Terminal} label="Antigravity CLI" sub="For users with an Antigravity subscription" />
+            {/* Claude Code CLI */}
+            <div className="p-6 rounded-2xl flex flex-col gap-4"
+              style={{ background: 'rgba(22,22,31,0.8)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                  <Terminal size={18} style={{ color: '#34d399' }} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-text-primary">Claude Code CLI</p>
+                    <span className="text-xs px-1.5 py-0.5 rounded font-medium"
+                      style={{ background: 'rgba(16,185,129,0.1)', color: '#34d399', border: '1px solid rgba(16,185,129,0.2)' }}>
+                      Recommended
+                    </span>
+                  </div>
+                  <p className="text-xs" style={{ color: '#475569' }}>Subscription · Server-side CLI</p>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: '#64748b' }}>
+                Spawns the <code className="px-1 py-0.5 rounded text-xs" style={{ background: 'rgba(255,255,255,0.06)', fontFamily: 'monospace' }}>claude</code> CLI
+                installed on the AgentReview server. Uses your Claude subscription — no token charges on top.
+                The server must have Claude Code installed and authenticated.
+              </p>
+              <ul className="space-y-2">
+                {[
+                  'Zero extra API cost — uses your subscription',
+                  'Full Claude capabilities including extended thinking',
+                  'Requires claude CLI installed on the host server',
+                  'Ideal for self-hosted teams with Claude subscriptions',
+                ].map(t => (
+                  <li key={t} className="flex items-start gap-2 text-xs" style={{ color: '#64748b' }}>
+                    <CheckCircle size={12} style={{ color: '#34d399', flexShrink: 0, marginTop: 1 }} />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto flex items-center gap-2 px-3 py-2 rounded-lg text-xs"
+                style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.12)', color: '#34d399' }}>
+                <Server size={11} />
+                Runs on the AgentReview server
+              </div>
+            </div>
+
+            {/* Antigravity CLI */}
+            <div className="p-6 rounded-2xl flex flex-col gap-4"
+              style={{ background: 'rgba(22,22,31,0.8)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.2)' }}>
+                  <Zap size={18} style={{ color: '#fbbf24' }} />
+                </div>
+                <div>
+                  <p className="font-semibold text-text-primary">Antigravity CLI</p>
+                  <p className="text-xs" style={{ color: '#475569' }}>Subscription · Server-side CLI</p>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: '#64748b' }}>
+                Runs the Antigravity CLI installed on the server. Works the same as Claude Code CLI
+                but for teams using an Antigravity AI subscription instead of Claude.
+              </p>
+              <ul className="space-y-2">
+                {[
+                  'Uses your existing Antigravity subscription',
+                  'No additional API charges',
+                  'Requires Antigravity CLI on the host server',
+                  'Same three-layer analysis pipeline',
+                ].map(t => (
+                  <li key={t} className="flex items-start gap-2 text-xs" style={{ color: '#64748b' }}>
+                    <CheckCircle size={12} style={{ color: '#f59e0b', flexShrink: 0, marginTop: 1 }} />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto flex items-center gap-2 px-3 py-2 rounded-lg text-xs"
+                style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.12)', color: '#fbbf24' }}>
+                <Server size={11} />
+                Runs on the AgentReview server
+              </div>
+            </div>
+
+            {/* Remote Skill */}
+            <div className="p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden"
+              style={{ background: 'rgba(22,22,31,0.8)', border: '1px solid rgba(139,92,246,0.25)', boxShadow: '0 0 30px rgba(139,92,246,0.06)' }}>
+              <div
+                className="absolute top-0 right-0 w-32 h-32 pointer-events-none"
+                style={{ background: 'radial-gradient(circle at top right, rgba(139,92,246,0.08) 0%, transparent 70%)' }}
+              />
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.25)' }}>
+                  <MonitorSmartphone size={18} style={{ color: '#a78bfa' }} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-text-primary">Remote Skill</p>
+                    <span className="text-xs px-1.5 py-0.5 rounded font-medium"
+                      style={{ background: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: '1px solid rgba(139,92,246,0.25)' }}>
+                      Unique
+                    </span>
+                  </div>
+                  <p className="text-xs" style={{ color: '#475569' }}>Claude Code on your laptop · No server AI cost</p>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed" style={{ color: '#64748b' }}>
+                The server queues the review task. Your <strong style={{ color: '#94a3b8' }}>local Claude Code</strong> polls
+                for pending tasks, runs the full AI analysis on your machine using your own Claude subscription,
+                and posts the results back. The server never touches any AI API.
+              </p>
+
+              {/* Flow diagram */}
+              <div className="rounded-xl p-4 space-y-2"
+                style={{ background: 'rgba(139,92,246,0.04)', border: '1px solid rgba(139,92,246,0.12)' }}>
+                <p className="text-xs font-semibold mb-3" style={{ color: '#a78bfa' }}>How it works</p>
+                {[
+                  { icon: Globe, label: 'You submit a review in the web UI', color: '#818cf8' },
+                  { icon: Server, label: 'Server queues the task (status: PENDING)', color: '#64748b' },
+                  { icon: MonitorSmartphone, label: 'Your Claude Code polls & picks up the task', color: '#a78bfa' },
+                  { icon: Sparkles, label: 'Claude analyses locally — full AI power', color: '#c4b5fd' },
+                  { icon: Wifi, label: 'Results posted back to the platform via API key', color: '#818cf8' },
+                ].map(({ icon: Icon, label, color }, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0"
+                      style={{ background: 'rgba(255,255,255,0.04)' }}>
+                      <Icon size={11} style={{ color }} />
+                    </div>
+                    <span className="text-xs" style={{ color: '#64748b' }}>{label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <ul className="space-y-2">
+                {[
+                  'Zero AI cost on the server — your machine does the work',
+                  'Full Claude capabilities: extended context, deep reasoning',
+                  'Secure: code never leaves your local environment for AI analysis',
+                  'Authenticate with an API key from Settings → API Keys',
+                ].map(t => (
+                  <li key={t} className="flex items-start gap-2 text-xs" style={{ color: '#64748b' }}>
+                    <CheckCircle size={12} style={{ color: '#a78bfa', flexShrink: 0, marginTop: 1 }} />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-auto rounded-lg px-3 py-2.5 text-xs font-mono"
+                style={{ background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.15)', color: '#a78bfa' }}>
+                <span style={{ color: '#475569' }}># run in Claude Code on your laptop</span>
+                <br />
+                /agentreview-tasks
+              </div>
+            </div>
+
+          </div>
+
+          {/* Quick comparison table */}
+          <div className="rounded-2xl overflow-hidden"
+            style={{ border: '1px solid rgba(255,255,255,0.06)', background: 'rgba(22,22,31,0.5)' }}>
+            <div className="px-5 py-3.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}>
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#475569' }}>Quick comparison</p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    {['Executor', 'Where AI runs', 'Cost model', 'Setup needed', 'Best for'].map(h => (
+                      <th key={h} className="px-5 py-3 text-left font-medium" style={{ color: '#334155' }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { name: 'Anthropic API', where: 'Server → Anthropic', cost: 'Per-token billing', setup: 'API key only', best: 'CI/CD · Automation', color: '#818cf8' },
+                    { name: 'Claude Code CLI', where: 'Server (local claude)', cost: 'Subscription (yours)', setup: 'claude CLI on host', best: 'Self-hosted teams', color: '#34d399' },
+                    { name: 'Antigravity CLI', where: 'Server (local antigravity)', cost: 'Subscription (yours)', setup: 'antigravity CLI on host', best: 'Antigravity users', color: '#fbbf24' },
+                    { name: 'Remote Skill', where: 'Your laptop', cost: 'Subscription (yours)', setup: 'Claude Code + API key', best: 'No server AI cost', color: '#a78bfa' },
+                  ].map(({ name, where, cost, setup, best, color }) => (
+                    <tr key={name} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+                      <td className="px-5 py-3 font-semibold" style={{ color }}>{name}</td>
+                      <td className="px-5 py-3" style={{ color: '#64748b' }}>{where}</td>
+                      <td className="px-5 py-3" style={{ color: '#64748b' }}>{cost}</td>
+                      <td className="px-5 py-3" style={{ color: '#64748b' }}>{setup}</td>
+                      <td className="px-5 py-3" style={{ color: '#64748b' }}>{best}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
