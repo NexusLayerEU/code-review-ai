@@ -78,12 +78,12 @@
   .btn-secondary {
     @apply inline-flex items-center gap-2 px-4 py-2 bg-transparent text-text-primary
            font-medium rounded-lg transition-all duration-150 text-sm;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.22);
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.35);
   }
 
   .btn-ghost {
