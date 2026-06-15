@@ -210,7 +210,7 @@ export default function LandingPage() {
               Start reviewing free
               <ArrowRight size={16} />
             </Link>
-            <Link to="/login" className="btn-secondary text-base py-3 px-7">
+            <Link to="/login" className="btn-primary text-base py-3 px-7">
               Sign in to dashboard
             </Link>
           </div>
