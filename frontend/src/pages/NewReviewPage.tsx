@@ -314,7 +314,7 @@ export default function NewReviewPage() {
           {/* Executor radio cards */}
           <div>
             <label className="label">Executor</label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-2 gap-2.5">
               {EXECUTOR_OPTIONS.map(({ type, label, description, icon: Icon, badge }) => {
                 const active = executorType === type
                 return (
