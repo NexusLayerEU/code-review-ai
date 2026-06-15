@@ -19,10 +19,12 @@ services:
 
   db:
     image: mariadb:11.4
+    ports:
+      - "3307:3306"
     environment:
       MARIADB_DATABASE: agentreview
       MARIADB_USER: agentreview
-      MARIADB_PASSWORD: ${DB_PASSWORD:-agentreview}
+      MARIADB_PASSWORD: agentreview_secure_2026
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
     volumes:
       - db_data:/var/lib/mysql
