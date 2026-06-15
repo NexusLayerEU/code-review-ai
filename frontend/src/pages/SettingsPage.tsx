@@ -21,7 +21,7 @@ import {
 import toast from 'react-hot-toast'
 import { apiKeyApi, ApiKeyDto } from '../lib/api'
 
-type Executor = 'anthropic' | 'claude-cli' | 'antigravity'
+type Executor = 'anthropic' | 'claude-cli' | 'antigravity' | 'remote-skill'
 
 /* ── helpers ─────────────────────────────────────────────────── */
 function formatDate(iso?: string) {
@@ -321,6 +321,11 @@ export default function SettingsPage() {
             id="antigravity" selected={executor === 'antigravity'} onSelect={() => setExecutor('antigravity')}
             label="Antigravity CLI" icon={Terminal}
             description="Runs the antigravity CLI. Requires an Antigravity subscription on this host."
+          />
+          <ExecutorCard
+            id="remote-skill" selected={executor === 'remote-skill'} onSelect={() => setExecutor('remote-skill')}
+            label="Remote Skill (Claude Code)" icon={Key}
+            description="Your local Claude Code picks up the review task via API key. No server AI cost — runs on your machine."
           />
         </div>
         <p className="text-xs mt-3" style={{ color: '#334155' }}>
