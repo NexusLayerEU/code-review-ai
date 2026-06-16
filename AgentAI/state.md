@@ -44,8 +44,21 @@
 
 ## In Progress
 
-_Nothing._
+_Nothing — live in production._
 
 ## Blocked
 
-_Nothing. Ready for first docker-compose build and test._
+_Nothing._
+
+## Shipped (2026-06-16 launch day)
+
+- [x] Removed Claude Code CLI + Antigravity CLI executors from all pages (Settings, NewReview, LandingPage, types)
+- [x] Added Support page (/support public + /app/support private) — admin@nexuslayer.eu + sales@nexuslayer.eu
+- [x] Support section box on LandingPage above footer
+- [x] 3 new Java backend rules: AI_S1_HARDCODED_SECRET, AI_D1_CONSOLE_DEBUG, AI_G2_BROAD_CATCH
+- [x] ZIP upload tab on NewReviewPage (JSZip client-side extraction, replaces directory scan)
+- [x] Remote Skill promo banner on DashboardPage
+- [x] Fixed ClaudeSkillPage URL → https://review.nexuslayer.eu
+- [x] Fixed LandingPage stats: LLM executors 4→2, rules 12+→15+
+- [x] Deployed to production: review.nexuslayer.eu
+- [x] LinkedIn launch post published

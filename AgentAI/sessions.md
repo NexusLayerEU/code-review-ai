@@ -1,5 +1,29 @@
 # Session Log
 
+## Session 2026-06-16 (Launch Day)
+
+- Did: Full pre-launch preparation and deployment
+- Changed:
+  - `frontend/src/pages/SettingsPage.tsx` — removed claude-cli + antigravity executor options, default changed to anthropic
+  - `frontend/src/pages/NewReviewPage.tsx` — removed CLI executors, replaced directory tab with ZIP upload (JSZip)
+  - `frontend/src/pages/LandingPage.tsx` — removed CLI executor cards + table rows, updated stats (executors 4→2, rules 12+→15+), added support section box
+  - `frontend/src/pages/DashboardPage.tsx` — added Remote Skill promo banner
+  - `frontend/src/pages/SupportPage.tsx` — new page (public + app route)
+  - `frontend/src/pages/ClaudeSkillPage.tsx` — replaced 192.168.68.111:8200 with https://review.nexuslayer.eu
+  - `frontend/src/pages/RulesPage.tsx` — updated QUA rules, added debug output + TODO/FIXME entries
+  - `frontend/src/types/index.ts` — ExecutorType narrowed to CLAUDE_API | REMOTE_SKILL
+  - `frontend/src/components/layout/AppLayout.tsx` — added Support nav item
+  - `frontend/package.json` — added jszip ^3.10.1
+  - `backend/.../rule/builtin/S1HardcodedSecretRule.java` — new CRITICAL rule
+  - `backend/.../rule/builtin/D1ConsoleDebugRule.java` — new LOW rule
+  - `backend/.../rule/builtin/G2BroadExceptionCatchRule.java` — new MEDIUM rule
+  - `frontend/src/App.tsx` — added /support public route + /app/support private route
+- Decided:
+  - ZIP upload extracts client-side via JSZip and submits as files[] array — no backend changes needed
+  - ExecutorType will only ever be CLAUDE_API or REMOTE_SKILL going forward
+  - Support contacts: admin@nexuslayer.eu (general), sales@nexuslayer.eu (enterprise/deployment)
+- Next: Monitor early access feedback, consider rate limiting per user, watch backend logs for errors
+
 ## Session 2026-06-14
 
 - Did:
