@@ -24,6 +24,30 @@
   - Support contacts: admin@nexuslayer.eu (general), sales@nexuslayer.eu (enterprise/deployment)
 - Next: Monitor early access feedback, consider rate limiting per user, watch backend logs for errors
 
+## Session 2026-06-17
+
+- Did:
+  - OSPD TAP mj02y41k (10.212.134.203) full audit: /etc/hosts, tap_env, activo-unified/.env, SETTINGS table, LDAP
+  - OSPD CRM crm1-fulakwnkorudallou (192.168.94.1) full audit: /etc/hosts, crm.jar springXMLConfig.xml, filecleaner.properties, SETTINGS, LDAP
+  - Athens Production read-only audit: filerepo (172.20.3.147) + webnode1 (172.20.3.143) — env files, service units, AIDraft app.properties
+  - Saved 3 MD audit files locally and pushed to home MarkVault + nexuslayer.eu MarkVault
+  - Pushed 3 notes to BrainVault nexuslayer.eu (IDs 32, 33, 34) and tagged OSPDAudit
+  - Fixed MarkVault on nexuslayer.eu: two bugs — SSO token dropped by catch-all route (App.tsx RootRedirect fix), code blocks unreadable (added highlight.js github-dark.css)
+  - Emptied BrainVault nexuslayer.eu for tdimakopoulos@profilesw.com (deleted 30 notes)
+- Changed:
+  - `/Users/admin/Documents/Thomas-SRC/CodeReviewAI/tap-audit-mj02y41k.md` (new)
+  - `/Users/admin/Documents/Thomas-SRC/CodeReviewAI/crm-audit-fulakwnkorudallou.md` (new)
+  - `/Users/admin/Documents/Thomas-SRC/CodeReviewAI/athens-audit-filerepo-webnode1.md` (new)
+  - VPS `/opt/nexuslayer/markvault/frontend/src/App.tsx` — RootRedirect preserves ?sso_token query param
+  - VPS `/opt/nexuslayer/markvault/frontend/src/main.tsx` — import highlight.js/styles/github-dark.css
+  - VPS `/opt/nexuslayer/markvault/frontend/src/index.css` — .prose pre code.hljs background transparent
+  - VPS `/opt/nexuslayer/markvault/frontend/package.json` — added highlight.js ^11.10.0
+- Decided:
+  - OSPD hardcoded IPs: 172.20.3.143 (webnode1/kapwssb) hardcoded in both TAP and CRM SETTINGS table — known technical debt
+  - AIDraft uses 172.20.5.100 instead of maxscale.ath.ospd.prv — unique outlier on filerepo
+  - BrainVault tag API: POST /tags needs lowercase color, tags assigned via PUT /notes/{id} with tagIds:[int]
+- Next: Verify MarkVault login flow works end-to-end on nexuslayer.eu
+
 ## Session 2026-06-14
 
 - Did:

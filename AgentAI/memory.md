@@ -49,6 +49,20 @@ flyway-mysql artifact is required for MariaDB + Spring Boot 3/Flyway 10 compatib
 Controller returns 202 Accepted with pollingUrl immediately.
 Client polls GET /api/v1/reviews/{id}/status until status=COMPLETE or FAILED.
 
+### 9. NexusLayer MarkVault on nexuslayer.eu (VPS 91.239.6.74)
+- API port 4086, frontend port 4006
+- SSO_JWT_SECRET must be `nexuslayer-shared-sso-secret-change-in-production-64chars!!` (not `nexlayer-`)
+- Identity Server signs JWT with HS384; MarkVault API accepts it
+- Frontend VITE_API_URL must be `https://markvault.nexuslayer.eu/v1`, VITE_IDENTITY_SERVER_URL `https://auth.nexuslayer.eu`
+- React Router catch-all `<Navigate to="/app">` drops query params — use RootRedirect with useLocation().search
+
+### 10. NexusLayer BrainVault on nexuslayer.eu (VPS 91.239.6.74)
+- API port 4082, frontend port 3001
+- JWT secret: `nexuslayer-shared-sso-secret-change-in-production-64chars!!`
+- GET /notes returns `{ items: [...] }` (paginated dict, not plain array)
+- POST /tags: color enum must be lowercase (e.g. `"amber"` not `"AMBER"`)
+- Assign tags to notes: PUT /notes/{id} with body `{ title, content, folderId, archived, tagIds: [int] }` — the `tags` string field is ignored
+
 ---
 
 ## Gotchas & Lessons
